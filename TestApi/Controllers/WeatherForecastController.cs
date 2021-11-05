@@ -19,24 +19,20 @@ namespace TestApi.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly Manager Manager;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            Manager manager)
         {
             _logger = logger;
+            Manager = manager;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get(string id)
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
+        public string Get(string id)
+            => @$"Singleton1 {Manager.Service1} - Singleton2 {Manager.Service2} - Scoped1 {Manager.Service3} -
+                    Scoped2 {Manager.Service4} - Transient1 {Manager.Service5} - Transient2 {Manager.Service6} -
+                    BestService {Manager.Service7.Id} - Behavior {Manager.Behavior}";
         [HttpGet]
         public IEnumerable<WeatherForecast> Get2()
         {
